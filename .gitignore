@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*.class
+*.so
+.venv/
+venv/
+env/
+
+# Config with secrets
+config.json
+.env
+.env.*
+
+# Generated content
+.mp/
+artifacts/
+Songs/
+*.mp3
+*.mp4
+*.wav
+*.srt
+*.png
+!assets/*.png
+
+# Temp & backup files
+*.bak
+*.bak.*
+*.log
+*.tmp
+niche.txt
+
+# Market data (may contain personal info)
+market_*.txt
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Firefox / Selenium
+geckodriver.log
+google-maps-scraper-*/
+
+# IDE
+.vscode/
+.idea/
+
+# Auto scripts
+auto.sh
+*.exe
+
