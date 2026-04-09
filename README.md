@@ -1,99 +1,124 @@
-# MoneyPrinter V2
+# AutoClipForge
 
-Sponsored by Post Bridge
+Automated video creation tool with Chinese TTS, AI image generation, and a web-based GUI.
 
-<a href="https://www.post-bridge.com/?ref=moneyprinter">
-  <img src="docs/repo/PostBridgeBanner.png" alt="Post Bridge integration banner" width="720" />
-</a>
+> Forked from [MoneyPrinterV2](https://github.com/FujiwaraChoki/MoneyPrinterV2) with major enhancements for Chinese-language content creation.
 
+## What's Different
 
-[![madewithlove](https://img.shields.io/badge/made_with-%E2%9D%A4-red?style=for-the-badge&labelColor=orange)](https://github.com/FujiwaraChoki/MoneyPrinterV2)
-
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Donate-brightgreen?logo=buymeacoffee)](https://www.buymeacoffee.com/fujicodes)
-[![GitHub license](https://img.shields.io/github/license/FujiwaraChoki/MoneyPrinterV2?style=for-the-badge)](https://github.com/FujiwaraChoki/MoneyPrinterV2/blob/main/LICENSE)
-[![GitHub issues](https://img.shields.io/github/issues/FujiwaraChoki/MoneyPrinterV2?style=for-the-badge)](https://github.com/FujiwaraChoki/MoneyPrinterV2/issues)
-[![GitHub stars](https://img.shields.io/github/stars/FujiwaraChoki/MoneyPrinterV2?style=for-the-badge)](https://github.com/FujiwaraChoki/MoneyPrinterV2/stargazers)
-[![Discord](https://img.shields.io/discord/1134848537704804432?style=for-the-badge)](https://dsc.gg/fuji-community)
-
-An Application that automates the process of making money online.
-MPV2 (MoneyPrinter Version 2) is, as the name suggests, the second version of the MoneyPrinter project. It is a complete rewrite of the original project, with a focus on a wider range of features and a more modular architecture.
-
-> **Note:** MPV2 needs Python 3.12 to function effectively.
-> Watch the YouTube video [here](https://youtu.be/wAZ_ZSuIqfk)
+| Feature | Original (MoneyPrinterV2) | AutoClipForge |
+|---------|--------------------------|---------------|
+| TTS Engine | KittenTTS (English) | **Edge-TTS + gTTS + espeak** with zh-TW support |
+| Video Pipeline | Basic YouTube Shorts | Rewritten with subtitle sync, smart chunking, pause control |
+| Image Generation | NanoBanana2 only | NanoBanana2 + **Flux image service** |
+| GUI | None | **Web-based GUI** (4600+ lines) with real-time progress |
+| Content Types | Generic shorts | Market reports, tech news, GitHub weekly, international briefs |
+| LLM Backend | GPT4Free | **Ollama** (local) + MiniMax API |
+| Language | English | **Traditional Chinese (zh-TW)** first, English supported |
 
 ## Features
 
-- [x] Twitter Bot (with CRON Jobs => `scheduler`)
-- [x] YouTube Shorts Automator (with CRON Jobs => `scheduler`)
-- [x] Affiliate Marketing (Amazon + Twitter)
-- [x] Find local businesses & cold outreach
+- **Web GUI** — browser-based control panel for video creation, account management, and artifact browsing
+- **Chinese TTS** — Edge-TTS with `zh-TW-HsiaoChenNeural`, smart punctuation-aware sentence splitting, configurable speed/pitch
+- **AI Image Generation** — Gemini (NanoBanana2) + optional self-hosted Flux service
+- **Smart Subtitles** — auto-generated `.srt` with CJK-aware timing via local Whisper or AssemblyAI
+- **Market Report Videos** — paste market data, auto-generate structured voiceover scripts
+- **Content Normalization** — LLM-powered pipeline to convert raw news/reports into structured video scripts
+- **YouTube Upload** — automated upload via Firefox profile with Selenium
+- **Artifact Management** — track generated audio, subtitles, and videos; auto-cleanup old files
 
-## Versions
+## Quick Start
 
-MoneyPrinter has different versions for multiple languages developed by the community for the community. Here are some known versions:
+### Prerequisites
 
-- Chinese: [MoneyPrinterTurbo](https://github.com/harry0703/MoneyPrinterTurbo)
+- Python 3.12+
+- FFmpeg
+- ImageMagick
+- Ollama (for local LLM)
 
-If you would like to submit your own version/fork of MoneyPrinter, please open an issue describing the changes you made to the fork.
-
-## Installation
-
-> ⚠️ If you are planning to reach out to scraped businesses per E-Mail, please first install the [Go Programming Language](https://golang.org/).
+### Installation
 
 ```bash
-git clone https://github.com/FujiwaraChoki/MoneyPrinterV2.git
+git clone https://github.com/walterfan1322/AutoClipForge.git
+cd AutoClipForge
 
-cd MoneyPrinterV2
-# Copy Example Configuration and fill out values in config.json
-cp config.example.json config.json
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
 
-# Create a virtual environment
-python -m venv venv
-
-# Activate the virtual environment - Windows
-.\venv\Scripts\activate
-
-# Activate the virtual environment - Unix
-source venv/bin/activate
-
-# Install the requirements
 pip install -r requirements.txt
+
+# Set up config
+cp config.example.json config.json
+# Edit config.json with your settings
 ```
 
-## Usage
+### Configuration
+
+Edit `config.json`:
+
+```jsonc
+{
+  "ollama_base_url": "http://127.0.0.1:11434",
+  "ollama_model": "qwen3.5:9b",
+  "nanobanana2_api_key": "",          // Gemini API key for image gen
+  "flux_api_base_url": "",            // Optional: self-hosted Flux service
+  "assembly_ai_api_key": "",          // Optional: AssemblyAI for subtitles
+  "tts_voice": "zh-TW-HsiaoChenNeural"
+}
+```
+
+For API keys, you can also use environment variables:
 
 ```bash
-# Run the application
+export MINIMAX_API_KEY="your-key"
+export FLUX_REMOTE_HOST="user@host"
+export GEMINI_API_KEY="your-key"
+```
+
+### Usage
+
+**GUI mode (recommended):**
+
+```bash
+python gui_app.py
+# Open http://localhost:5000 in your browser
+```
+
+**CLI mode:**
+
+```bash
 python src/main.py
 ```
 
-## Documentation
+## Project Structure
 
-All relevant documents can be found [here](docs/).
-
-## Scripts
-
-For easier usage, there are some scripts in the `scripts` directory that can be used to directly access the core functionality of MPV2 without the need for user interaction.
-
-All scripts need to be run from the root directory of the project, e.g. `bash scripts/upload_video.sh`.
-
-## Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us. Check out [docs/Roadmap.md](docs/Roadmap.md) for a list of features that need to be implemented.
-
-## Code of Conduct
-
-Please read [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## License
-
-MoneyPrinterV2 is licensed under `Affero General Public License v3.0`. See [LICENSE](LICENSE) for more information.
+```
+AutoClipForge/
+├── gui_app.py              # Web GUI (Flask)
+├── src/
+│   ├── main.py             # CLI entry point
+│   ├── classes/
+│   │   ├── Tts.py          # TTS engine (Edge-TTS/gTTS/espeak)
+│   │   ├── YouTube.py      # Video generation & upload pipeline
+│   │   ├── Twitter.py      # Twitter bot
+│   │   ├── AFM.py          # Affiliate marketing
+│   │   └── Outreach.py     # Email outreach
+│   ├── config.py           # Configuration loader
+│   ├── llm_provider.py     # Ollama integration
+│   └── utils.py            # Utilities
+├── config.example.json     # Config template (no secrets)
+├── scripts/                # Helper scripts
+├── docs/                   # Documentation
+└── tests/                  # Test suite
+```
 
 ## Acknowledgments
 
-- [KittenTTS](https://github.com/KittenML/KittenTTS)
-- [gpt4free](https://github.com/xtekky/gpt4free)
+- [MoneyPrinterV2](https://github.com/FujiwaraChoki/MoneyPrinterV2) — original project
+- [Edge-TTS](https://github.com/rany2/edge-tts) — Microsoft Edge TTS engine
+- [Ollama](https://ollama.com) — local LLM runtime
 
-## Disclaimer
+## License
 
-This project is for educational purposes only. The author will not be responsible for any misuse of the information provided. All the information on this website is published in good faith and for general information purposes only. The author does not make any warranties about the completeness, reliability, and accuracy of this information. Any action you take upon the information you find on this website (FujiwaraChoki/MoneyPrinterV2) is strictly at your own risk. The author will not be liable for any losses and/or damages in connection with the use of our website.
+[AGPL-3.0](LICENSE)
+
